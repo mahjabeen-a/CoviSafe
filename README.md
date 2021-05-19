@@ -1,0 +1,2 @@
+# CoviSafe
+DBMS Mini Project
