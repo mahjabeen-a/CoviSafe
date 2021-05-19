@@ -7,4 +7,4 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///covisafe.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
-from shop import routes
+from shop.admin import routes
