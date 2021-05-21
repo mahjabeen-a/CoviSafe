@@ -37,12 +37,12 @@ def updatebrand(id):
 @app.route('/addcat',methods=['GET','POST'])
 def addcat():
     if request.method == "POST":
-        getbrand = request.form.get('category')
-        cat = Brand(name=getbrand)
+        getcat = request.form.get('category')
+        cat = Category(name=getcat)
         db.session.add(cat)
-        flash(f'The category {getbrand} was added to your database','success')
-        return redirect(url_for('addcat'))
         db.session.commit()
+        flash(f'The category {getcat} was added to your database','success')
+        return redirect(url_for('addcat'))  
     return render_template('products/addbrand.html')
 
 @app.route('/updatecat/<int:id>',methods=['GET','POST'])
@@ -61,5 +61,7 @@ def updatecat(id):
 
 @app.route('/addproduct', methods=['GET','POST'])
 def addproduct():
+    brands = Brand.query.all()
+    categories = Category.query.all()
     form = Addproducts(request.form)
-    return render_template('products/addproduct.html',title='Add product page',form=form)
+    return render_template('products/addproduct.html',title='Add product page', form=form, brands=brands, categories=categories)

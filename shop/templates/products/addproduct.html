@@ -15,6 +15,30 @@
                     {{ render_field(form.price, class="form-control") }}
                     {{ render_field(form.discount, class="form-control") }}
                     {{ render_field(form.stock, class="form-control") }}
+                    <br>
+                    <dt>Add a brand</dt>
+                    <select name="brand" id="brand" class="form-control" required>
+                     
+                    <option value=""> Select A brand</option>
+                    {% for brand in brands %}
+                    <option value="{{brand.id}}">{{brand.name}}</option>
+                    {% endfor %}
+                    
+                    </select>
+                    <br>
+                   
+                    <dt>Add a category</dt>
+                    <select name="category" id="category" class="form-control" required>
+                   
+                    <option value=""> Select A category</option>
+                     {% for category in categories %}
+                    <option value="{{category.id}}">{{category.name}}</option>
+                     {% endfor %}
+                 
+                    </select>
+                    <br>
+                   
+
                     {{ render_field(form.colors, class="form-control") }}
                     {{ render_field(form.description, class="form-control", rows="10") }}
                 </div>
