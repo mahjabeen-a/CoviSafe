@@ -1,6 +1,9 @@
+<!-- Prints error (checks condition for each field eg- min 4 chars for name) 
+WTForms returns standard Python unicode strings, so we have to tell Jinja2 that this data is already HTML-escaped with the |safe filter.
+-->
 {% macro render_field(field) %}
   <dt>{{ field.label }}
-  <dd>{{ field(**kwargs)|safe }}
+  <dd>{{ field(**kwargs)|safe }} <!-- text box -->
   {% if field.errors %}
     <ul class=errors>
     {% for error in field.errors %}

@@ -13,6 +13,7 @@ def register():
     if request.method == 'POST' and form.validate():
         hash_password = bcrypt.generate_password_hash(form.password.data)
         user = User(name=form.name.data, username=form.username.data, email=form.email.data, password=hash_password)
+        #add and commit the current user's entry
         db.session.add(user)
         db.session.commit()
         flash(f'Welcome {form.name.data} ! Thanks for registering', 'success')
