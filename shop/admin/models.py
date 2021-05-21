@@ -12,5 +12,6 @@ class User(db.Model):
 
     def __repr__(self):
         return '<User %r>' % self.username
+        #this will be displayed when we do query.all
 
 db.create_all()
