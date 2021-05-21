@@ -9,4 +9,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'spooprathmahj142815'
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
+
 from shop.admin import routes
+from shop.products import routes
