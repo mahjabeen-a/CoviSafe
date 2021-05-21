@@ -1,0 +1,6 @@
+url_for : 
+It accepts the name of the function as its first argument and any number of keyword arguments, each corresponding to a variable part of the URL rule.
+
+redirect :
+redirects to the link given by url_for.
+

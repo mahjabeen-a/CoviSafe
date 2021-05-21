@@ -1,0 +1,34 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+{% include '_messages.html' %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="text-center bg-info p-2 h4">Add a product</div>
+                {% from "_formhelpers.html" import render_field %}
+                <form method="POST" enctype="multipart/form-data">
+                <div>
+                    {{ render_field(form.name, class="form-control") }}
+                    {{ render_field(form.price, class="form-control") }}
+                    {{ render_field(form.discount, class="form-control") }}
+                    {{ render_field(form.stock, class="form-control") }}
+                    {{ render_field(form.colors, class="form-control") }}
+                    {{ render_field(form.description, class="form-control", rows="10") }}
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-4">{{ render_field(form.image_1) }}</div>
+                        <div class="col-md-4">{{ render_field(form.image_2) }}</div>
+                        <div class="col-md-4">{{ render_field(form.image_3) }}</div>
+                    </div>
+                </div>
+                <p><input type="submit" value="{% if getproduct %}Update {% else %}Add{% endif %} product" class="btn-outline-info">
+                </form>
+            </div>
+      <div class="col-md-1"></div>
+    </div>
+</div>
+{% endblock content %}

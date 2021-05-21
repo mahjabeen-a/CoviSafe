@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_bcrypt import Bcrypt 
 
+#passing the current module as a parameter, returns object
 app = Flask(__name__)
 #URI - Uniform Resource Identifier
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///covisafe.db'
