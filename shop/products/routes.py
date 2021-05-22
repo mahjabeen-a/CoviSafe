@@ -1,9 +1,10 @@
 #route functions for brand,product and category
 
 from flask import request,session,url_for,redirect,render_template,flash
-from shop import app,db
+from shop import app,db,photos
 from .models import Brand,Category
 from .forms import Addproducts
+import secrets
 
 #adding the brand to the database
 @app.route('/addbrand',methods=['GET','POST'])
@@ -64,4 +65,8 @@ def addproduct():
     brands = Brand.query.all()
     categories = Category.query.all()
     form = Addproducts(request.form)
+    if request.method=="POST":
+        image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + ".")
+        image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + ".")
+        image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + ".")
     return render_template('products/addproduct.html',title='Add product page', form=form, brands=brands, categories=categories)
