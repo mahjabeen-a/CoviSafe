@@ -2,10 +2,16 @@ from flask import render_template,session, request, redirect, url_for, flash
 from shop import app, db, bcrypt
 from .forms import RegistrationForm, LoginForm
 from .models import User
+from shop.products.models import Addproduct
+import os
 
-@app.route('/admin')
+@app.route('/')
 def admin():
-    return render_template('admin/index.html', title='Admin Page')
+    if 'email' not in session:
+        flash('Please login first','danger')
+        return redirect(url_for('login'))
+    products = Addproduct.query.all()
+    return render_template('admin/index.html', title='Admin Page',products=products)
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
@@ -17,7 +23,7 @@ def register():
         db.session.add(user)
         db.session.commit()
         flash(f'Welcome {form.name.data} ! Thanks for registering', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('login'))
     return render_template('admin/register.html', form=form, title="Registration Page")
 
 
