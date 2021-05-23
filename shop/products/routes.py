@@ -66,6 +66,7 @@ def updatecat(id):
         return redirect(url_for('categories'))
     return render_template('products/updatebrand.html', title='Update cat',updatecat=updatecat)
 
+#saving product details in database
 @app.route('/addproduct', methods=['GET','POST'])
 def addproduct():
     if 'email' not in session:
