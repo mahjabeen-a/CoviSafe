@@ -54,8 +54,8 @@
             <td>{{ product.discount }}</td>
             <td>{{ product.brand.name}}</td>
             <td> <img src="{{url_for('static',filename='images/' + product.image_1)}}" alt="{{product.name}}" width="50" height="40"></td>
-            <th>Edit</th>
-            <th>Delete</th>
+            <td><a href="{{url_for('updateproduct',id=product.id)}}"class="btn btn-info btn-sm" >Edit</a></td>
+            <td><a href="{{url_for('updateproduct',id=product.id)}}"class="btn btn-danger btn-sm" >Delete</a></td>
           </tr>
           {% endfor %}
           </tbody>

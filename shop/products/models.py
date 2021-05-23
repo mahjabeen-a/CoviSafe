@@ -15,10 +15,12 @@ class Addproduct(db.Model):
     pub_date = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     brand_id = db.Column(db.Integer, db.ForeignKey('brand.id'), nullable=False)
+    #backref-
+    #lazy-loads data from the database
     brand = db.relationship('Brand',backref=db.backref('brands', lazy=True))
 
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'), nullable=False)
-    category = db.relationship('Category',backref=db.backref('categories', lazy=True))
+    category = db.relationship('Category',backref=db.backref('categories', lazy=True)) 
 
     image_1 = db.Column(db.String(150), nullable=False, default='image1.jpg')
     image_2 = db.Column(db.String(150), nullable=False, default='image2.jpg')
