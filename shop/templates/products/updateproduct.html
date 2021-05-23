@@ -19,7 +19,7 @@
                     <dt>Add a brand</dt>
                     <select name="brand" id="brand" class="form-control" required>
                      
-                    <option value="product.brand_id"> {{product.brand.name}}</option>
+                    <option value="{{product.brand_id}}"> {{product.brand.name}}</option>
                     {% for brand in brands %}
                     <option value="{{brand.id}}">{{brand.name}}</option>
                     {% endfor %}
