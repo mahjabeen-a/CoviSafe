@@ -1,5 +1,6 @@
 #route functions for brand,product and category
 
+from shop.admin.routes import category
 from flask import request, session, url_for, redirect, render_template, flash, current_app
 from shop import app, db, photos
 from .models import Brand, Category, Addproduct
@@ -35,6 +36,20 @@ def updatebrand(id):
         return redirect(url_for('brands'))
     return render_template('products/updatebrand.html', title='Update brand', updatebrand=updatebrand)
 
+@app.route('/deletebrand/<int:id>',methods=['GET','POST'])
+def deletebrand(id):
+    brand = Brand.query.get_or_404(id)
+    if request.method == "POST":
+        db.session.delete(brand)
+        db.session.commit()
+        flash(f'The brand {brand.name} was deleted from your database','success')
+        return redirect(url_for('admin'))
+    flash(f'The brand {brand.name} cannot be deleted','warning')
+    return redirect(url_for('admin'))
+
+
+
+
 #adding the category to the database
 @app.route('/addcat',methods=['GET','POST'])
 def addcat():
@@ -63,6 +78,17 @@ def updatecat(id):
         db.session.commit()
         return redirect(url_for('category'))
     return render_template('products/updatebrand.html', title='Update Category', updatecat=updatecat)
+
+@app.route('/deletecat/<int:id>',methods=['GET','POST'])
+def deletecat(id):
+    category = Category.query.get_or_404(id)
+    if request.method == "POST":
+        db.session.delete(category)
+        db.session.commit()
+        flash(f'The category {category.name} was deleted from your database','success')
+        return redirect(url_for('admin'))
+    flash(f'The category {category.name} cannot be deleted','warning')
+    return redirect(url_for('admin'))
 
 #saving product details in database
 @app.route('/addproduct', methods=['GET','POST'])
