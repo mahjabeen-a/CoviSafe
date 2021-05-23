@@ -1,11 +1,11 @@
-from flask import render_template,session, request, redirect, url_for, flash
+from flask import render_template, session, request, redirect, url_for, flash
 from shop import app, db, bcrypt
 from .forms import RegistrationForm, LoginForm
 from .models import User
 from shop.products.models import Addproduct, Brand, Category
 import os
 
-@app.route('/')
+@app.route('/admin')
 def admin():
     if 'email' not in session:
         flash('Please login first','danger')

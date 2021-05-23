@@ -1,10 +1,10 @@
 #route functions for brand,product and category
 
-from flask import request,session,url_for,redirect,render_template,flash
-from shop import app,db,photos
-from .models import Brand,Category,Addproduct
+from flask import request, session, url_for, redirect, render_template, flash, current_app
+from shop import app, db, photos
+from .models import Brand, Category, Addproduct
 from .forms import Addproducts
-import secrets
+import secrets, os
 
 #adding the brand to the database
 @app.route('/addbrand',methods=['GET','POST'])
@@ -108,9 +108,28 @@ def updateproduct(id):
         product.category_id = category
         product.colors = form.colors.data
         product.desc = form.description.data
+        if request.files.get('image_1'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_1))
+                product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + ".")
+            except:
+                product.image_1 = photos.save(request.files.get('image_1'), name=secrets.token_hex(10) + ".")
+        if request.files.get('image_2'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_2))
+                product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + ".")
+            except:
+                product.image_2 = photos.save(request.files.get('image_2'), name=secrets.token_hex(10) + ".")
+        if request.files.get('image_3'):
+            try:
+                os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_3))
+                product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + ".")
+            except:
+                product.image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + ".")
         db.session.commit()
         flash(f'Your product has been updated','success')
         return redirect(url_for('admin'))
+        
         
     form.name.data = product.name
     form.price.data = product.price
