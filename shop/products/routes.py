@@ -30,12 +30,10 @@ def updatebrand(id):
     brand = request.form.get('brand')
     if request.method =="POST":
         updatebrand.name = brand
-        flash(f'The brand {updatebrand.name} was changed to {brand}','success')
+        flash(f'Your brand has been updated.','success')
         db.session.commit()
         return redirect(url_for('brands'))
-    brand = updatebrand.name
-    return render_template('products/addbrand.html', title='Update brand',brands='brands',updatebrand=updatebrand)
-
+    return render_template('products/updatebrand.html', title='Update brand', updatebrand=updatebrand)
 
 #adding the category to the database
 @app.route('/addcat',methods=['GET','POST'])
@@ -58,13 +56,13 @@ def updatecat(id):
         flash('Login first please','danger')
         return redirect(url_for('login'))
     updatecat = Category.query.get_or_404(id)
-    category = request.form.get('category')  
+    category = request.form.get('category')
     if request.method =="POST":
         updatecat.name = category
-        flash(f'The category {updatecat.name} was changed to {category}','success')
+        flash(f'Your category has been updated.','success')
         db.session.commit()
-        return redirect(url_for('categories'))
-    return render_template('products/updatebrand.html', title='Update cat',updatecat=updatecat)
+        return redirect(url_for('category'))
+    return render_template('products/updatebrand.html', title='Update Category', updatecat=updatecat)
 
 #saving product details in database
 @app.route('/addproduct', methods=['GET','POST'])

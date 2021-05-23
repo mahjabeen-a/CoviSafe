@@ -49,7 +49,7 @@
             <tr>
                 <td>{{loop.index}}</td>
                 <td>{{ brand.name }}</td>
-                <th><a href="" class="btn btn-sn btn-outline-info">Edit</a></th>
+                <th><a href="{{url_for('updatebrand', id=brand.id)}}" class="btn btn-sn btn-outline-info">Edit</a></th>
                 <th><a href="" class="btn btn-sn btn-outline-danger">Delete</a></th>
             </tr>
             {% endfor %}
@@ -59,7 +59,7 @@
             <tr>
                 <td>{{loop.index}}</td>
                 <td>{{ category.name }}</td>
-                <th><a href="" class="btn btn-sn btn-outline-info">Edit</a></th>
+                <th><a href="{{url_for('updatecat', id=category.id)}}" class="btn btn-sn btn-outline-info">Edit</a></th>
                 <th><a href="" class="btn btn-sn btn-outline-danger">Delete</a></th>
             </tr>
             {% endfor %}
