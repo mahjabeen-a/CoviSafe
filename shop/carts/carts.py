@@ -2,7 +2,7 @@ from flask import request, session, url_for, redirect, render_template, flash, c
 from shop import app, db
 from shop.products.models import Addproduct
 
-def MagerDicts(dict1,dict2):
+def MergeDicts(dict1,dict2):
     if isinstance(dict1, list) and isinstance(dict2,list):
         return dict1  + dict2
     elif isinstance(dict1, dict) and isinstance(dict2, dict):
@@ -25,7 +25,7 @@ def Addcart():
                 if product_id in session['Shoppingcart']:
                    print("this item already in youur cart")
                 else:
-                    session['Shoppingcart'] = MagerDicts(session['Shoppingcart'], DictItems)
+                    session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems)
                     return redirect(request.referrer)
             
             else:
@@ -49,4 +49,31 @@ def getCart():
         tax =("%.2f" %(.06 * float(subtotal)))
         grandtotal = float("%.2f" % (1.06 * subtotal))
     return render_template('products/carts.html',tax=tax, grandtotal=grandtotal)
+
+@app.route('/updatecart/<int:code>', methods=['POST'])
+def updatecart(code):
+    if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('home'))
+    if request.method =="POST":
+        quantity = request.form.get('quantity')
+        color = request.form.get('color')
+        try:
+            session.modified = True
+            for key , item in session['Shoppingcart'].items():
+                if int(key) == code:
+                    item['quantity'] = quantity
+                    item['color'] = color
+                    flash('Item is updated!')
+                    return redirect(url_for('getCart'))
+        except Exception as e:
+            print(e)
+            return redirect(url_for('getCart'))
+
+@app.route('/empty')
+def empty_cart():
+    try:
+        session.pop('Shoppingcart', None)
+        return redirect(url_for('home'))
+    except Exception as e:
+        print(e)
     

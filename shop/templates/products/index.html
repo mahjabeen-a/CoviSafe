@@ -1,57 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
-<!--NAVBAR STARTS-->
-<div class="container">
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="/">Home</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-
-          <li class="nav-item">
-            <a class="nav-link" href="/">All products</a>
-          </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Brands
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {% for brand in brands %}
-              <li><a class="dropdown-item" href="{{url_for('get_brand', id=brand.id)}}">{{brand.name}}</a></li>
-              {% endfor %}
-            </ul>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              Categories
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              {% for category in categories %}
-              <li><a class="dropdown-item" href="{{url_for('get_category', id=category.id)}}">{{category.name}}</a></li>
-              {% endfor %}
-            </ul>
-          </li>
-
-          <li class="nav-item">
-            <a class="nav-link" href="{{url_for('getCart')}}" tabindex="-1">Cart ({{session['Shoppingcart']|length}})</a>
-          </li>
-        </ul>
-        <form class="d-flex">
-          <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-          <button class="btn btn-outline-success" type="submit">Search</button>
-        </form>
-      </div>
-    </div>
-  </nav>
-</div>
-<!--NAVBAR ENDS-->
+{% include 'navbar.html' %}
 <div class="container">
   <!--DISPLAY PRODUCT BASED ON BRAND-->
   <div class="row">
@@ -73,17 +22,16 @@
           <form action="{{url_for('Addcart')}}" method="POST">
             <input type="hidden" name="product_id" value="{{b.id}}">
             <button type="submit" class="btn btn-sm btn-warning float-end">Add to Cart</button>
-           
+
             <input type="hidden" name="quantity" value="1">
             {% set colors = b.colors.split(',') %}
-          
             <select name="colors" id="colors" style="visibility: hidden;">
-                {% for color in colors %}
-                {% set col = color.split(':') %}
-                <option value="{{col[0]}}">{{col[0]|capitalize }}</option>
-                {% endfor %}
+              {% for color in colors %}
+              {% set col = color.split(':') %}
+              <option value="{{col[0]}}">{{col[0]|capitalize }}</option>
+              {% endfor %}
             </select>
-        </form>
+          </form>
         </div>
       </div>
     </div>
@@ -110,17 +58,17 @@
           <form action="{{url_for('Addcart')}}" method="POST">
             <input type="hidden" name="product_id" value="{{get_cat.id}}">
             <button type="submit" class="btn btn-sm btn-warning float-end">Add to Cart</button>
-           
-            <input type="hidden" name="quantity" value="1" style="visibility: hidden;" >
+
+            <input type="hidden" name="quantity" value="1" style="visibility: hidden;">
             {% set colors = get_cat.colors.split(',') %}
-           
+
             <select name="colors" id="colors" style="visibility: hidden;">
-                {% for color in colors %}
-                {% set col = color.split(':') %}
-                <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
-                {% endfor %}
+              {% for color in colors %}
+              {% set col = color.split(':') %}
+              <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
+              {% endfor %}
             </select>
-        </form>
+          </form>
         </div>
       </div>
     </div>
@@ -147,17 +95,17 @@
         <form action="{{url_for('Addcart')}}" method="POST">
           <input type="hidden" name="product_id" value="{{product.id}}">
           <button type="submit" class="btn btn-sm btn-warning float-end">Add to Cart</button>
-          
+
           <input type="hidden" name="quantity" value="1" min="1" max="{{product.stock}}">
           {% set colors = product.colors.split(',') %}
-        
-        <select name="colors" id="colors" style="visibility: hidden;">
-              {% for color in colors %}
-              {% set col = color.split(':') %}
-              <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
-              {% endfor %}
+
+          <select name="colors" id="colors" style="visibility: hidden;">
+            {% for color in colors %}
+            {% set col = color.split(':') %}
+            <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
+            {% endfor %}
           </select>
-      </form>
+        </form>
       </div>
     </div>
   </div>
@@ -170,8 +118,8 @@
     {% if products.has_prev %}
     <a href="{{url_for('home', page=products.prev_num)}}" class="btn btn-sm btn-outline-info">Previous</a>
     {% endif %}
-    <!-- 1 is the max no of items in a page, can change later-->
-    {% if products.total > 1 %}
+    <!-- 2 is the max no of items in a page, can change later-->
+    {% if products.total > 2 %}
     {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1,right_current=2) %}
     {% if page_num %}
     {% if products.page == page_num %}
