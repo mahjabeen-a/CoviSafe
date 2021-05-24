@@ -16,22 +16,25 @@ def Addcart():
     try:
         product_id = request.form.get('product_id')
         quantity = request.form.get('quantity')
-        colors = request.form.get('colors')
+        color = request.form.get('colors')
         product = Addproduct.query.filter_by(id=product_id).first()
-        if product_id and quantity and colors and request.method == "POST":
-            DictItems = {product_id:{'name':product.name, 'price':float(product.price), 'discount':product.discount,'color':colors,'quantity':quantity,'image':product.image_1, 'colors':product.colors}}
 
+        if request.method =="POST":
+            DictItems = {product_id:{'name':product.name,'price':float(product.price),'discount':product.discount,'color':color,'quantity':quantity,'image':product.image_1, 'colors':product.colors}}
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
-                   print("this item already in youur cart")
+                    for key, item in session['Shoppingcart'].items():
+                        if int(key) == int(product_id):
+                            session.modified = True
+                            item['quantity'] = int(item['quantity']) + 1
                 else:
                     session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems)
                     return redirect(request.referrer)
-            
             else:
                 session['Shoppingcart'] = DictItems
                 return redirect(request.referrer)
+
     except Exception as e:
         print(e)
     finally:
@@ -84,9 +87,10 @@ def deleteitem(id):
         print(e)
         return redirect(url_for('getCart'))
 
-@app.route('/empty')
-def empty_cart():
+@app.route('/clearcart')
+def clearcart():
     try:
+        #to pop out this particular session
         session.pop('Shoppingcart', None)
         return redirect(url_for('home'))
     except Exception as e:
