@@ -23,7 +23,7 @@ def Addcart():
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
-                    print("this product already in your cart")
+                   print("this item already in youur cart")
                 else:
                     session['Shoppingcart'] = MagerDicts(session['Shoppingcart'], DictItems)
                     return redirect(request.referrer)
@@ -35,3 +35,18 @@ def Addcart():
         print(e)
     finally:
         return redirect(request.referrer)
+
+@app.route('/carts')
+def getCart():
+    if 'Shoppingcart' not in session:
+        return redirect(request.referrer)
+    subtotal = 0
+    grandtotal = 0
+    for key,product in session['Shoppingcart'].items():
+        discount = (product['discount']/100) * float(product['price'])
+        subtotal += float(product['price']) * int(product['quantity'])
+        subtotal -= discount
+        tax =("%.2f" %(.06 * float(subtotal)))
+        grandtotal = float("%.2f" % (1.06 * subtotal))
+    return render_template('products/carts.html',tax=tax, grandtotal=grandtotal)
+    

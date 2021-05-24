@@ -1,0 +1,49 @@
+
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container">
+    <div class="row">
+        <table class="table table-sm">
+            <thead>
+                <th>Sr</th>
+                <th>Name</th>
+                <th>Color</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>Discount</th>
+                <th>Subtotal</th>
+                <th>Update</th>
+                <th>Delete</th>
+            </thead>
+            <tbody>
+                {% for key, product in session['Shoppingcart'].items() %}
+                {% set discount = "%0.2f"|format((product.discount/100) * product.price|float) %}
+                <tr>
+                    <td>{{loop.index}}</td>
+                    <td>{{product.name}}</td>
+                    <td>{{product.color}}</td>
+                    <td>Rs {{product.price}}</td>
+                    <td>{{product.quantity}}</td>
+                    {% if product.discount >0 %}
+                    <td>{{product.discount}}% &nbsp;is {{discount}}</td>
+                    {% else %}
+                    <td></td>
+                    {% endif %}
+                    {% set subtotal = product.quantity|int * product.price|float %}
+                    <td>{{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
+                    <td><a href="#">Update</a></td>
+                    <td><a href="#">Delete</a></td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td></td>
+                    <td><a href="/">Continue Shopping</a></td>
+                    <td colspan="3"><h3>Tax: {{tax}}</h3></td>
+                    <td colspan="4"><h3>Grand Total: {{grandtotal}}</h3></td>
+                    
+                </tr>
+    </div>
+</div>
+{% endblock content %}
+
+{{session['Shoppingcart']}}
