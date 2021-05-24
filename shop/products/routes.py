@@ -2,7 +2,7 @@
 
 from shop.admin.routes import category
 from flask import request, session, url_for, redirect, render_template, flash, current_app
-from shop import app, db, photos
+from shop import app, db, photos, products,search
 from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 import secrets, os
@@ -13,11 +13,20 @@ def brands():
 def categories():
     return Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
 
+
 @app.route('/')
 def home():
     page = request.args.get('page',1, type=int)
     products = Addproduct.query.filter(Addproduct.stock > 0).order_by(Addproduct.id.desc()).paginate(page=page, per_page=2)
     return render_template('products/index.html', products=products, brands=brands(), categories=categories())
+
+@app.route('/result')
+def result():
+    searchword = request.args.get('q')
+    products = Addproduct.query.msearch(searchword,fields= ['name','desc'],limit=6)
+    return render_template('products/result.html',products = products,brands=brands(), categories=categories())
+
+
 
 @app.route('/product/<int:id>')
 def single_page(id):
