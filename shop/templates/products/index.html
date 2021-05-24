@@ -19,6 +19,8 @@
         </div>
         <div class="card-footer">
           <a href="{{url_for('single_page', id=b.id)}}" class="float-start btn btn-sm btn-primary">Details</a>
+
+          <!--Add to cart-->
           <form action="{{url_for('Addcart')}}" method="POST">
             <input type="hidden" name="product_id" value="{{b.id}}">
             <button type="submit" class="btn btn-sm btn-warning float-end">Add to Cart</button>
@@ -32,6 +34,7 @@
               {% endfor %}
             </select>
           </form>
+
         </div>
       </div>
     </div>

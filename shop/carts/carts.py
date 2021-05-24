@@ -10,7 +10,6 @@ def MergeDicts(dict1, dict2):
         return dict(list(dict1.items()) + list(dict2.items()))
     return False
 
-
 @app.route('/addcart', methods=['POST'])
 def Addcart():
     try:
@@ -24,14 +23,17 @@ def Addcart():
             if 'Shoppingcart' in session:
                 print(session['Shoppingcart'])
                 if product_id in session['Shoppingcart']:
-                    for key, item in session['Shoppingcart'].items():
+                    # increasing the count of already added product
+                    for key, val in session['Shoppingcart'].items():
                         if int(key) == int(product_id):
                             session.modified = True
-                            item['quantity'] = int(item['quantity']) + 1
+                            val['quantity'] = int(val['quantity']) + 1
                 else:
                     session['Shoppingcart'] = MergeDicts(session['Shoppingcart'], DictItems)
                     return redirect(request.referrer)
             else:
+                # Shoppingcart is a key in session (which is a dictionary)
+                # session is for the given cart
                 session['Shoppingcart'] = DictItems
                 return redirect(request.referrer)
 
@@ -42,11 +44,12 @@ def Addcart():
 
 @app.route('/carts')
 def getCart():
+    #updatecart and deleteitem and navbar.html calls this
     if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
         return redirect(url_for('home'))
     subtotal = 0
     grandtotal = 0
-    for key,product in session['Shoppingcart'].items():
+    for key, product in session['Shoppingcart'].items():
         discount = (product['discount']/100) * float(product['price'])
         subtotal += float(product['price']) * int(product['quantity'])
         subtotal -= discount
@@ -63,7 +66,7 @@ def updatecart(code):
         color = request.form.get('color')
         try:
             session.modified = True
-            for key , item in session['Shoppingcart'].items():
+            for key, item in session['Shoppingcart'].items():
                 if int(key) == code:
                     item['quantity'] = quantity
                     item['color'] = color
@@ -81,6 +84,7 @@ def deleteitem(id):
         session.modified = True
         for key , item in session['Shoppingcart'].items():
             if int(key) == id:
+                #if key not present, return none
                 session['Shoppingcart'].pop(key, None)
                 return redirect(url_for('getCart'))
     except Exception as e:

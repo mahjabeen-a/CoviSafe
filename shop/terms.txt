@@ -6,3 +6,9 @@ redirects to the link given by url_for.
 
 request.files :
 It is a multi dictionary through which we can access file uploads.
+
+session:
+Session object is also a dictionary object containing key-value pairs of session variables and associated values.
+
+request.referrer:
+Contains the URL the request came from, although it might not be sent by the client for various reasons.
