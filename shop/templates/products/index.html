@@ -12,17 +12,16 @@
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           
           <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
+            <a class="nav-link" href="/">All products</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown
+              Brands
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
+                {% for brand in brands %}
+              <li><a class="dropdown-item" href="{{url_for('get_brand', id=brand.id)}}">{{brand.name}}</a></li>
+                {% endfor %}
             </ul>
           </li>
           <li class="nav-item">
@@ -40,7 +39,29 @@
 <!--NAVBAR ENDS-->
 <div class="container">
     <div class="row">
-        {% for product in products %}
+
+{% if brand %}
+  {% for b in brand %}
+  <div class="col-md-3 mt-3">
+      <div class="card">
+          <img src="{{url_for('static', filename= 'images/' + b.image_1)}}" alt="{{b.name}}" class="card-img-top" height="250px">
+          <div class="card-body">
+              <h5 class="text-center">{{b.name}}</h5>
+              <p class="text-center">Price: Rs {{b.price}}</p>
+              {% if b.discount > 0 %}
+              <b class="text-danger">Discount: {{b.discount}}%</b>
+              {% endif %}
+          </div>
+          <div class="card-footer">
+              <a href="#" class="float-start btn btn-sm btn-primary">Details</a>
+              <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+          </div>
+      </div>
+  </div>
+{% endfor %}
+            
+{% else %}  
+      {% for product in products %}
         <div class="col-md-3 mt-3">
             <div class="card">
                 <img src="{{url_for('static', filename= 'images/' + product.image_1)}}" alt="{{product.name}}" class="card-img-top" height="250px">
@@ -58,6 +79,7 @@
             </div>
         </div>
         {% endfor %}
+{% endif %}
     </div>
 </div>
 {% endblock content %}
