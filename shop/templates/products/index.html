@@ -53,6 +53,7 @@
 </div>
 <!--NAVBAR ENDS-->
 <div class="container">
+  <!--DISPLAY PRODUCT BASED ON BRAND-->
   <div class="row">
     {% if brand %}
     {% for b in brand %}
@@ -68,7 +69,7 @@
           {% endif %}
         </div>
         <div class="card-footer">
-          <a href="#" class="float-start btn btn-sm btn-primary">Details</a>
+          <a href="{{url_for('single_page', id=b.id)}}" class="float-start btn btn-sm btn-primary">Details</a>
           <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
         </div>
       </div>
@@ -76,6 +77,7 @@
     {% endfor %}
   </div>
 
+  <!--DISPLAY PRODUCT BASED ON CATEGORY-->
   <div class="row">
     {% elif get_cat_prod %}
     {% for get_cat in get_cat_prod %}
@@ -91,7 +93,7 @@
           {% endif %}
         </div>
         <div class="card-footer">
-          <a href="#" class="float-start btn btn-sm btn-primary">Details</a>
+          <a href="{{url_for('single_page', id=get_cat.id)}}" class="float-start btn btn-sm btn-primary">Details</a>
           <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
         </div>
       </div>
@@ -99,6 +101,7 @@
     {% endfor %}
   </div>
 
+  <!--DISPLAY ALL PRODUCTS IN HOME PAGE-->
   <div class="row"></div>
   {% else %}
   {% for product in products.items %}
@@ -114,7 +117,7 @@
         {% endif %}
       </div>
       <div class="card-footer">
-        <a href="#" class="float-start btn btn-sm btn-primary">Details</a>
+        <a href="{{url_for('single_page', id=product.id)}}" class="float-start btn btn-sm btn-primary">Details</a>
         <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
       </div>
     </div>
@@ -128,7 +131,7 @@
     {% if products.has_prev %}
     <a href="{{url_for('home', page=products.prev_num)}}" class="btn btn-sm btn-outline-info">Previous</a>
     {% endif %}
-    <!--1 is the max no of items in a page, can change later-->
+    <!-- 1 is the max no of items in a page, can change later-->
     {% if products.total > 1 %}
     {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1,right_current=2) %}
     {% if page_num %}
