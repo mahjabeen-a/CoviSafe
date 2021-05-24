@@ -24,6 +24,18 @@
                 {% endfor %}
             </ul>
           </li>
+
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Categories
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                {% for category in categories %}
+              <li><a class="dropdown-item" href="{{url_for('get_category', id=category.id)}}">{{category.name}}</a></li>
+                {% endfor %}
+            </ul>
+          </li>
+
           <li class="nav-item">
             <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
           </li>
@@ -59,6 +71,28 @@
       </div>
   </div>
 {% endfor %}
+
+{% elif get_cat_prod %}
+  {% for get_cat in get_cat_prod %}
+  <div class="col-md-3 mt-3">
+    <div class="card">
+        <img src="{{url_for('static', filename= 'images/' + get_cat.image_1)}}" alt="{{get_cat.name}}" class="card-img-top" height="250px">
+        <div class="card-body">
+            <h5 class="text-center">{{get_cat.name}}</h5>
+            <p class="text-center">Price: Rs {{get_cat.price}}</p>
+            {% if get_cat.discount > 0 %}
+            <b class="text-danger">Discount: {{get_cat.discount}}%</b>
+            {% endif %}
+        </div>
+        <div class="card-footer">
+            <a href="#" class="float-start btn btn-sm btn-primary">Details</a>
+            <a href="#" class="float-end btn btn-sm btn-warning">Add to cart</a>
+        </div>
+    </div>
+</div>
+
+
+  {% endfor %}
             
 {% else %}  
       {% for product in products %}
