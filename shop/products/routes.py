@@ -7,34 +7,32 @@ from .models import Brand, Category, Addproduct
 from .forms import Addproducts
 import secrets, os
 
+def brands():
+    return Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+
+def categories():
+    return Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+
 @app.route('/')
 def home():
     page = request.args.get('page',1, type=int)
     products = Addproduct.query.filter(Addproduct.stock > 0).order_by(Addproduct.id.desc()).paginate(page=page, per_page=2)
-    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
-    return render_template('products/index.html', products=products, brands=brands, categories=categories)
+    return render_template('products/index.html', products=products, brands=brands(), categories=categories())
 
 @app.route('/product/<int:id>')
 def single_page(id):
     product = Addproduct.query.get_or_404(id)
-    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
-    return render_template('products/single_page.html',product=product,brands=brands, categories=categories)
+    return render_template('products/single_page.html',product=product,brands=brands(), categories=categories())
 
 @app.route('/brand/<int:id>')
 def get_brand(id):
     brand = Addproduct.query.filter_by(brand_id=id)
-    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
-    return render_template('products/index.html', brand=brand, brands=brands, categories=categories)
+    return render_template('products/index.html', brand=brand, brands=brands(), categories=categories())
 
 @app.route('/categories/<int:id>')
 def get_category(id):
     get_cat_prod = Addproduct.query.filter_by(category_id=id)
-    categories = Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
-    brands = Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
-    return render_template('products/index.html', get_cat_prod=get_cat_prod , categories=categories, brands=brands)
+    return render_template('products/index.html', get_cat_prod=get_cat_prod , categories=categories(), brands=brands())
 
 #adding the brand to the database
 @app.route('/addbrand',methods=['GET','POST'])

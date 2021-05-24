@@ -52,21 +52,24 @@
                             <td>{{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
                             <td><button type="submit" class="btn btn-sm btn-info">Update</button></td>
                         </form>
-                        
-                        <td><a href="#">Delete</a></td>
+
+                        <td><a href="{{url_for('deleteitem', id=key)}}" class="btn btn-sm btn-danger">Delete</a></td>
                     </tr>
                     {% endfor %}
-                    <tr>
-                        <td></td>
-                        <td><a href="/">Continue Shopping</a></td>
-                        <td colspan="3">
-                            <h3>Tax: {{tax}}</h3>
-                        </td>
-                        <td colspan="4">
-                            <h3>Grand Total: {{grandtotal}}</h3>
-                        </td>
-
-                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-sm">
+                <tr>
+                    <td></td>
+                    <td><a href="/">Check out</a></td>
+                    <td colspan="3">
+                        <h3>Tax: {{tax}}</h3>
+                    </td>
+                    <td colspan="4">
+                        <h3>Grand Total: {{grandtotal}}</h3>
+                    </td>
+                </tr>
+            </table>
         </div>
     </div>
 </div>

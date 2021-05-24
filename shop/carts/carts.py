@@ -1,9 +1,10 @@
 from flask import request, session, url_for, redirect, render_template, flash, current_app
 from shop import app, db
 from shop.products.models import Addproduct
+from shop.products.routes import brands, categories
 
-def MergeDicts(dict1,dict2):
-    if isinstance(dict1, list) and isinstance(dict2,list):
+def MergeDicts(dict1, dict2):
+    if isinstance(dict1, list) and isinstance(dict2, list):
         return dict1  + dict2
     elif isinstance(dict1, dict) and isinstance(dict2, dict):
         return dict(list(dict1.items()) + list(dict2.items()))
@@ -38,8 +39,8 @@ def Addcart():
 
 @app.route('/carts')
 def getCart():
-    if 'Shoppingcart' not in session:
-        return redirect(request.referrer)
+    if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('home'))
     subtotal = 0
     grandtotal = 0
     for key,product in session['Shoppingcart'].items():
@@ -48,7 +49,7 @@ def getCart():
         subtotal -= discount
         tax =("%.2f" %(.06 * float(subtotal)))
         grandtotal = float("%.2f" % (1.06 * subtotal))
-    return render_template('products/carts.html',tax=tax, grandtotal=grandtotal)
+    return render_template('products/carts.html',tax=tax, grandtotal=grandtotal, brands=brands(), categories=categories())
 
 @app.route('/updatecart/<int:code>', methods=['POST'])
 def updatecart(code):
@@ -68,6 +69,20 @@ def updatecart(code):
         except Exception as e:
             print(e)
             return redirect(url_for('getCart'))
+
+@app.route('/deleteitem/<int:id>')
+def deleteitem(id):
+    if 'Shoppingcart' not in session or len(session['Shoppingcart']) <= 0:
+        return redirect(url_for('home'))
+    try:
+        session.modified = True
+        for key , item in session['Shoppingcart'].items():
+            if int(key) == id:
+                session['Shoppingcart'].pop(key, None)
+                return redirect(url_for('getCart'))
+    except Exception as e:
+        print(e)
+        return redirect(url_for('getCart'))
 
 @app.route('/empty')
 def empty_cart():
