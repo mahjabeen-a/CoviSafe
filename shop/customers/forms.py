@@ -28,4 +28,6 @@ class CustomerRegistrationForm(FlaskForm):
         if Register.query.filter_by(email=email.data).first():
             raise ValidationError("This email address is already in use!")
     
-    
+class CustomerLoginForm(FlaskForm):
+    email = StringField('Email: ',[validators.Email(), validators.DataRequired()]) #needs email validator to be installed -> wtforms[email]
+    password = PasswordField('Password: ',[validators.DataRequired()])
