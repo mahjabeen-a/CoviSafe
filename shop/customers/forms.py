@@ -1,7 +1,9 @@
-from wtforms import Form, StringField, TextAreaField, PasswordField, SubmitField, validators
+from wtforms import Form, StringField, TextAreaField, PasswordField, SubmitField, validators, ValidationError
 from flask_wtf.file import FileRequired, FileAllowed, FileField
+from flask_wtf import FlaskForm
+from .models import Register
 
-class CustomerRegistrationForm(Form):
+class CustomerRegistrationForm(FlaskForm):
     name = StringField('Name: ')
     username = StringField('Username: ', [validators.DataRequired()])
     email = StringField('Email: ', [validators.Email(), validators.DataRequired()]) #needs email validator to be installed -> wtforms[email]
@@ -17,4 +19,13 @@ class CustomerRegistrationForm(Form):
     profile = FileField('Profile', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only image allowed!')])
 
     submit = SubmitField('Register')
+
+    def validate_username(self, username):
+        if Register.query.filter_by(username=username.data).first():
+            raise ValidationError("This username is already in use!")
+        
+    def validate_email(self, email):
+        if Register.query.filter_by(email=email.data).first():
+            raise ValidationError("This email address is already in use!")
+    
     
