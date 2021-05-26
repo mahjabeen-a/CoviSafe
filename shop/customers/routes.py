@@ -60,7 +60,6 @@ def customerLogin():
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             #login
             login_user(user)
-            flash('You are logged in now!','success')
             next = request.args.get('next')
             return redirect(next or url_for('home'))
         else:
