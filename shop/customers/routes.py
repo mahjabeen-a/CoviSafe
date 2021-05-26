@@ -8,6 +8,34 @@ from .forms import CustomerRegistrationForm,CustomerLoginForm
 from .models import Register,CustomerOrder
 import secrets, os
 import pdfkit
+import stripe
+
+#enter the keys as given in your stripe webpage
+publishable_key = 'pk_test_51IvDSkSF76dLNO0kL60OspwKhL5Kk2f3aCKhEJqNOb11qBAgxY2b1njLus2zap4WIV4Qqg0aQCYEWqQsTlqTIvqj00ddCtdsVo'
+stripe.api_key = ''
+
+@app.route('/payment',methods=['POST'])
+def payment():
+    invoice = request.form.get('invoice')
+    amount = request.form.get('amount')
+    customer = stripe.Customer.create(
+      email=request.form['stripeEmail'],
+      source=request.form['stripeToken'],
+    )
+    charge = stripe.Charge.create(
+      customer=customer.id,
+      description='Myshop',
+      amount=amount,
+      currency='inr',
+    )
+    orders =  CustomerOrder.query.filter_by(customer_id = current_user.id,invoice=invoice).order_by(CustomerOrder.id.desc()).first()
+    orders.status = 'Paid'
+    db.session.commit()
+    return redirect(url_for('thanks'))
+
+@app.route('/thanks')
+def thanks():
+    return render_template('customer/thank.html')
 
 @app.route('/customer/register', methods=['GET', 'POST'])
 def customer_register():
@@ -42,12 +70,21 @@ def customer_logout():
     logout_user()
     return redirect(url_for('home'))
 
+#remove unwanted attributes from the session
+def updateshoppingcart():
+    for key, shopping in session['Shoppingcart'].items():
+        session.modified = True
+        del shopping['image']
+        del shopping['colors']
+    return updateshoppingcart
+
 @app.route('/getorder')
 @login_required
 def get_order():
     if current_user.is_authenticated:
         customer_id = current_user.id
         invoice = secrets.token_hex(5)
+        updateshoppingcart()
         try:
             order = CustomerOrder(invoice=invoice, customer_id=customer_id, orders=session['Shoppingcart'])
             db.session.add(order)

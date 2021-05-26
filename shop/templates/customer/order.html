@@ -57,8 +57,26 @@
             
             <table class="table table-sm">
                 <tr>
-                    <td></td>
-                    <td><a href="/" class="btn btn-success">Check Out</a></td>
+                    {% if orders.status == 'Paid' %}
+                    {% else %}
+                    <td>
+                        <!--change the publishable key (data-key)-->
+                        <form action="{{url_for('payment')}}" method="POST">
+                            {% set amount = grandtotal.replace('.', '') %}
+                            <input type="hidden" name="amount" value="{{amount}}">
+                            <input type="hidden" name="invoice" value="{{orders.invoice}}">
+                            <script
+                              src="https://checkout.stripe.com/checkout.js"
+                              class="stripe-button"
+                              data-key="pk_test_51IvDSkSF76dLNO0kL60OspwKhL5Kk2f3aCKhEJqNOb11qBAgxY2b1njLus2zap4WIV4Qqg0aQCYEWqQsTlqTIvqj00ddCtdsVo"
+                              data-name="Shop"
+                              data-description="Products bought"
+                              data-amount="{{amount}}"
+                              data-currency="inr">
+                            </script>
+                          </form>
+                          {% endif %}
+                    </td>
                     <td width="35%"></td>
                     <td><h5>Tax: Rs {{tax}}</h5></td>
                     <td><h5>Grand Total: Rs {{grandtotal}}</h5></td>
