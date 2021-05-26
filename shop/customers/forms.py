@@ -18,7 +18,7 @@ class CustomerRegistrationForm(FlaskForm):
 
     profile = FileField('Profile', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only image allowed!')])
 
-    submit = SubmitField('Register')
+    submit = SubmitField('Submit')
 
     def validate_username(self, username):
         if Register.query.filter_by(username=username.data).first():

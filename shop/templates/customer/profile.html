@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+{% block content %}
+{% from "_formhelpers.html" import render_field %}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-2"></div>
+        <div class="col-md-8">
+            <h1 class="bg-info text-center p-2 border border-dark border-2">Profile</h1>
+        </div>
+        <div class="col-md-2"></div>
+    </div>
+    <form action="" method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-4">
+                {{ render_field(form.name, class="form-control")}}
+                {{ render_field(form.username, class="form-control")}}
+                {{ render_field(form.email, class="form-control")}}
+                {{ render_field(form.contact, class="form-control")}}
+               
+            </div>
+            <div class="col-md-4">
+                {{ render_field(form.address, class="form-control")}}
+                {{ render_field(form.state, class="form-control")}}
+                {{ render_field(form.city, class="form-control")}}
+                {{ render_field(form.pincode, class="form-control")}}
+                {{ form.submit(class="btn btn-sm btn-info float-end") }}
+            </div>
+            <div class="col-md-2"></div>
+        </div>
+    </form>
+</div>
+
+{% endblock content %}

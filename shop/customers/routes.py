@@ -74,6 +74,33 @@ def customer_logout():
     logout_user()
     return redirect(url_for('home'))
 
+@app.route('/profile/<int:id>', methods=['GET','POST'])
+def profile(id):
+    customer = Register.query.get_or_404(id)
+    form = CustomerRegistrationForm()
+    if request.method == "POST":
+        customer.name = form.name.data
+        customer.username = form.username.data
+        customer.email = form.email.data
+        customer.state = form.state.data
+        customer.city = form.city.data
+        customer.contact = form.contact.data
+        customer.address  = form.address.data
+        customer.pincode = form.pincode.data
+        db.session.commit()
+        return redirect(url_for('home'))
+
+    form.name.data = customer.name
+    form.username.data = customer.username  
+    form.email.data = customer.email
+    form.state.data =  customer.state
+    form.city.data = customer.city
+    form.contact.data = customer.contact
+    form.address.data = customer.address
+    form.pincode.data = customer.pincode
+     
+    return render_template('customer/profile.html', form=form)
+
 #remove unwanted attributes from the session
 def updateshoppingcart():
     for key, shopping in session['Shoppingcart'].items():
