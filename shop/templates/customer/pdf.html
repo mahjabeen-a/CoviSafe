@@ -49,7 +49,7 @@
                                 <td>
                                     {{product.color|capitalize}}
                                 </td>
-                                <td>${{"%.2f"|format(product.price)}}</td>
+                                <td>Rs {{"%.2f"|format(product.price)}}</td>
                                 <td> {{product.quantity}} </td>
                                 {% if product.discount %}
                                 <td>{{product.discount}} % &nbsp; &nbsp; is {{"%.2f"|format(discount)}}</td>
@@ -57,7 +57,7 @@
                                 <td></td>
                                 {% endif %}
                                 {% set subtotal = product.quantity|int * product.price|float %}
-                                <td>${{"%.2f"|format(subtotal - discount|round(1,'floor')) }}</td>
+                                <td>Rs {{"%.2f"|format(subtotal - discount|round(1,'floor')) }}</td>
                             </form>
                         </tr>
                         {% endfor %}
@@ -67,10 +67,10 @@
                     <tr>
                         <td width="35%"></td>
                         <td>
-                            <h5>Tax: ${{tax}}</h5>
+                            <h5>Tax: Rs {{tax}}</h5>
                         </td>
                         <td>
-                            <h5>Grand total: ${{grandTotal}}</h3>
+                            <h5>Grand total: Rs {{grandTotal}}</h3>
                         </td>
 
                     </tr>

@@ -6,6 +6,7 @@ from flask_login import login_required,current_user,login_user,logout_user
 from shop import app, db, photos, search, bcrypt,login_manager
 from .forms import CustomerRegistrationForm,CustomerLoginForm
 from .models import Register,CustomerOrder
+from shop.products.routes import brands, categories
 import secrets, os
 import pdfkit
 import stripe
@@ -56,12 +57,14 @@ def customerLogin():
     if form.validate_on_submit():
         user = Register.query.filter_by(email= form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
+            #login
             login_user(user)
-            flash('You are login now!','success')
+            flash('You are logged in now!','success')
             next = request.args.get('next')
             return redirect(next or url_for('home'))
-        flash('Incorrect email and password','danger')
-        return redirect (url_for('customerLogin'))
+        else:
+            flash('Incorrect email or password','danger')
+            return redirect (url_for('customerLogin'))
     return render_template('customer/login.html' ,form=form)
 
 #default get method
@@ -84,17 +87,18 @@ def get_order():
     if current_user.is_authenticated:
         customer_id = current_user.id
         invoice = secrets.token_hex(5)
-        updateshoppingcart()
+        updateshoppingcart
         try:
+            #orders is of type JsonEncodedDict
             order = CustomerOrder(invoice=invoice, customer_id=customer_id, orders=session['Shoppingcart'])
             db.session.add(order)
             db.session.commit()
             session.pop('Shoppingcart')
-            flash('your order has been sent successfully', 'success')
+            flash('Your order has been sent successfully!', 'success')
             return redirect(url_for('orders',invoice=invoice))
         except Exception as e:
             print(e)
-            flash('something went wrong while getting order','danger')
+            flash('Something went wrong while getting order!','danger')
             return redirect(url_for('getCart'))
 
 @app.route('/orders/<invoice>')
@@ -114,7 +118,7 @@ def orders(invoice):
             grandtotal = ("%.2f" % (1.06 * float(subtotal)))
     else:
         return redirect(url_for('customerLogin'))
-    return render_template('customer/order.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, customer=customer, orders=orders)
+    return render_template('customer/order.html', invoice=invoice, tax=tax, subtotal=subtotal, grandtotal=grandtotal, customer=customer, orders=orders, brands=brands(), categories=categories())
 
 @app.route('/get_pdf/<invoice>', methods=['POST'])
 @login_required

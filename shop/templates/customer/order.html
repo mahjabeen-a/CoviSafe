@@ -45,7 +45,7 @@
                             <td></td>
                             {% endif %}
                             {% set subtotal = product.quantity|int * product.price|float %}
-                            <td>{{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
+                            <td>Rs {{"%0.2f"|format((subtotal|float) - discount|float)}}</td>
                            
                         </form>
 
