@@ -55,3 +55,8 @@ def login():
         else:
             flash('Wrong email or password', 'danger')
     return render_template('admin/login.html',title='Login page',form=form)
+
+@app.route('/logout')
+def logout():
+    session.pop('email', None)
+    return redirect(url_for('login'))
