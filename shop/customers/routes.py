@@ -1,5 +1,6 @@
 #routes for customers
 
+from shop.products.models import Addproduct
 from shop.admin.routes import category
 from flask import request, session, url_for, redirect, render_template, flash, current_app, make_response
 from flask_login import login_required,current_user,login_user,logout_user
@@ -80,7 +81,7 @@ def updateshoppingcart():
         del shopping['image']
         del shopping['colors']
     return updateshoppingcart
-
+        
 @app.route('/getorder')
 @login_required
 def get_order():
@@ -90,6 +91,11 @@ def get_order():
         updateshoppingcart
         try:
             #orders is of type JsonEncodedDict
+            for key, val in session['Shoppingcart'].items():
+                updateprod = Addproduct.query.get_or_404(int(key))
+                updateprod.stock -= int(val['quantity'])
+                db.session.commit()
+
             order = CustomerOrder(invoice=invoice, customer_id=customer_id, orders=session['Shoppingcart'])
             db.session.add(order)
             db.session.commit()
