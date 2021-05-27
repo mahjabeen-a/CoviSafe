@@ -2,20 +2,33 @@
 {% extends "layout.html" %}
 
 {% block content %}
-<div class="text-center h1">Register</div>
 <div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1 class="bg-info text-center p-2 border border-dark border-2">Admin Register</h1>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
     {% include '_messages.html' %}
     {% from "_formhelpers.html" import render_field %}
-    <form method="post" enctype="multipart/form-data">
-        <div>
-            {{ render_field(form.name, class="form-control") }}
-            {{ render_field(form.username, class="form-control") }}
-            {{ render_field(form.email, class="form-control") }}
-            {{ render_field(form.password, class="form-control") }}
-            {{ render_field(form.confirm, class="form-control") }}
-            <input type="file" name="photo">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <form method="post" enctype="multipart/form-data">
+                {{ form.csrf_token }}
+                <div>
+                    {{ render_field(form.name, class="form-control") }}
+                    {{ render_field(form.username, class="form-control") }}
+                    {{ render_field(form.email, class="form-control") }}
+                    {{ render_field(form.password, class="form-control") }}
+                    {{ render_field(form.confirm, class="form-control") }}
+                    <input type="file" name="photo">
+                </div>
+                <p><input type=submit value="Register" class="btn btn-info mt-2"></p>
+            </form>
         </div>
-        <p><input type=submit value="Register" class="btn btn-info mt-2"></p>
-    </form>
+        <div class="col-md-4"></div>
+    </div>
 </div>
 {% endblock content %}

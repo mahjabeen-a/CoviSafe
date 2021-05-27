@@ -4,11 +4,17 @@
 {% block content %}
 
 <div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1 class="bg-info text-center p-2 border border-dark border-2">Login</h1>
+        </div>
+        <div class="col-md-4"></div>
+    </div>
     {% from "_formhelpers.html" import render_field %}
     <div class="row">
         <div class="col-md-4"></div>
         <div class="col-md-4">
-            <div class="text-center h1 text-white bg-primary p-2">Login</div>
             {% include '_messages.html' %}
             <form method="post" enctype="multipart/form-data">
                     {{ form.csrf_token }}
