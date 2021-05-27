@@ -122,7 +122,7 @@
     <a href="{{url_for('home', page=products.prev_num)}}" class="btn btn-sm btn-outline-info">Previous</a>
     {% endif %}
     <!-- 2 is the max no of items in a page, can change later-->
-    {% if products.total > 4 %}
+    {% if products.total > 8 %}
     {% for page_num in products.iter_pages(left_edge=1, right_edge=2, left_current=1,right_current=2) %}
     {% if page_num %}
     {% if products.page == page_num %}
