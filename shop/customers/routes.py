@@ -1,12 +1,12 @@
 #routes for customers
 
-from shop.products.models import Addproduct
+from shop.products.models import Product
 from shop.admin.routes import category
 from flask import request, session, url_for, redirect, render_template, flash, current_app, make_response
 from flask_login import login_required,current_user,login_user,logout_user
 from shop import app, db, photos, search, bcrypt,login_manager
 from .forms import CustomerRegistrationForm,CustomerLoginForm
-from .models import Register,CustomerOrder
+from .models import Customer,CustomerOrder
 from shop.products.routes import brands, categories
 import secrets, os
 import pdfkit
@@ -44,7 +44,7 @@ def customer_register():
     form = CustomerRegistrationForm()
     if form.validate_on_submit():
         hash_password = bcrypt.generate_password_hash(form.password.data)
-        register = Register(name=form.name.data, username=form.username.data, email=form.email.data,password=hash_password,state=form.state.data, city=form.city.data,contact=form.contact.data, address=form.address.data, pincode=form.pincode.data)
+        register = Customer(name=form.name.data, username=form.username.data, email=form.email.data,password=hash_password,state=form.state.data, city=form.city.data,contact=form.contact.data, address=form.address.data, pincode=form.pincode.data)
         db.session.add(register)
         flash(f'Welcome {form.name.data} Thank you for registering!', 'success')
         db.session.commit()
@@ -56,7 +56,7 @@ def customer_register():
 def customerLogin():
     form = CustomerLoginForm()
     if form.validate_on_submit():
-        user = Register.query.filter_by(email= form.email.data).first()
+        user = Customer.query.filter_by(email= form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             #login
             login_user(user)
@@ -75,7 +75,7 @@ def customer_logout():
 
 @app.route('/profile/<int:id>', methods=['GET','POST'])
 def profile(id):
-    customer = Register.query.get_or_404(id)
+    customer = Customer.query.get_or_404(id)
     form = CustomerRegistrationForm()
     if request.method == "POST":
         customer.name = form.name.data
@@ -118,7 +118,7 @@ def get_order():
         try:
             #orders is of type JsonEncodedDict
             for key, val in session['Shoppingcart'].items():
-                updateprod = Addproduct.query.get_or_404(int(key))
+                updateprod = Product.query.get_or_404(int(key))
                 updateprod.stock -= int(val['quantity'])
                 db.session.commit()
 
@@ -140,7 +140,7 @@ def orders(invoice):
         grandtotal = 0
         subtotal = 0
         customer_id = current_user.id
-        customer = Register.query.filter_by(id=customer_id).first()
+        customer = Customer.query.filter_by(id=customer_id).first()
         orders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc()).first()
         for key, product in orders.orders.items():
             discount = (product['discount']/100) * float(product['price'])
@@ -160,7 +160,7 @@ def get_pdf(invoice):
         subtotal = 0
         customer_id = current_user.id
         if request.method == 'POST':
-            customer = Register.query.filter_by(id=customer_id).first()
+            customer = Customer.query.filter_by(id=customer_id).first()
             orders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc()).first()
             for key, product in orders.orders.items():
                 discount = (product['discount']/100) * float(product['price'])

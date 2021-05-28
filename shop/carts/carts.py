@@ -1,6 +1,6 @@
 from flask import request, session, url_for, redirect, render_template, flash, current_app
 from shop import app, db
-from shop.products.models import Addproduct
+from shop.products.models import Product
 from shop.products.routes import brands, categories
 
 def MergeDicts(dict1, dict2):
@@ -16,7 +16,7 @@ def Addcart():
         product_id = request.form.get('product_id')
         quantity = request.form.get('quantity')
         color = request.form.get('colors')
-        product = Addproduct.query.filter_by(id=product_id).first()
+        product = Product.query.filter_by(id=product_id).first()
 
         if request.method =="POST":
             DictItems = {product_id:{'name':product.name,'price':float(product.price),'discount':product.discount,'color':color,'quantity':quantity,'image':product.image_1, 'colors':product.colors}}

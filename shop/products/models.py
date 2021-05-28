@@ -2,7 +2,7 @@
 from shop import db
 from datetime import datetime
 
-class Addproduct(db.Model):
+class Product(db.Model):
     __searchable__=['name','desc']
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(80), nullable=False)
@@ -26,7 +26,7 @@ class Addproduct(db.Model):
     image_3 = db.Column(db.String(150), nullable=False, default='image3.jpg')
 
     def __repr__(self):
-        return '<Addproduct %r>' % self.name
+        return '<Product %r>' % self.name
 
 
 class Brand(db.Model):

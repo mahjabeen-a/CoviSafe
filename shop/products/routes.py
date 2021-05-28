@@ -3,44 +3,44 @@
 from shop.admin.routes import category
 from flask import request, session, url_for, redirect, render_template, flash, current_app
 from shop import app, db, photos, products,search
-from .models import Brand, Category, Addproduct
+from .models import Brand, Category, Product
 from .forms import Addproducts
 import secrets, os
 
 def brands():
-    return Brand.query.join(Addproduct, (Brand.id == Addproduct.brand_id)).all()
+    return Brand.query.join(Product, (Brand.id == Product.brand_id)).all()
 
 def categories():
-    return Category.query.join(Addproduct, (Category.id == Addproduct.category_id)).all()
+    return Category.query.join(Product, (Category.id == Product.category_id)).all()
 
 
 @app.route('/')
 def home():
     page = request.args.get('page',1, type=int)
-    products = Addproduct.query.filter(Addproduct.stock > 0).order_by(Addproduct.id.desc()).paginate(page=page, per_page=8)
+    products = Product.query.filter(Product.stock > 0).order_by(Product.id.desc()).paginate(page=page, per_page=8)
     return render_template('products/index.html', products=products, brands=brands(), categories=categories())
 
 @app.route('/result')
 def result():
     searchword = request.args.get('q')
-    products = Addproduct.query.msearch(searchword,fields= ['name','desc'],limit=6)
+    products = Product.query.msearch(searchword,fields= ['name','desc'],limit=6)
     return render_template('products/result.html',products = products,brands=brands(), categories=categories())
 
 
 
 @app.route('/product/<int:id>')
 def single_page(id):
-    product = Addproduct.query.get_or_404(id)
+    product = Product.query.get_or_404(id)
     return render_template('products/single_page.html',product=product,brands=brands(), categories=categories())
 
 @app.route('/brand/<int:id>')
 def get_brand(id):
-    brand = Addproduct.query.filter_by(brand_id=id)
+    brand = Product.query.filter_by(brand_id=id)
     return render_template('products/index.html', brand=brand, brands=brands(), categories=categories())
 
 @app.route('/categories/<int:id>')
 def get_category(id):
-    get_cat_prod = Addproduct.query.filter_by(category_id=id)
+    get_cat_prod = Product.query.filter_by(category_id=id)
     return render_template('products/index.html', get_cat_prod=get_cat_prod , categories=categories(), brands=brands())
 
 #adding the brand to the database
@@ -147,7 +147,7 @@ def addproduct():
         image_3 = photos.save(request.files.get('image_3'), name=secrets.token_hex(10) + ".")
         
         #creating a tuple
-        addpro = Addproduct(name=name,price=price,discount=discount,stock=stock,colors=colors,desc=desc,brand_id=brand,category_id=category,image_1=image_1,image_2=image_2,image_3=image_3)
+        addpro = Product(name=name,price=price,discount=discount,stock=stock,colors=colors,desc=desc,brand_id=brand,category_id=category,image_1=image_1,image_2=image_2,image_3=image_3)
         db.session.add(addpro)
         flash(f'The product {name} has been added to your database','success')
         db.session.commit()
@@ -158,7 +158,7 @@ def addproduct():
 def updateproduct(id):
     brands = Brand.query.all()
     categories = Category.query.all()
-    product = Addproduct.query.get_or_404(id)
+    product = Product.query.get_or_404(id)
     brand = request.form.get('brand')
     category = request.form.get('category')
     form = Addproducts(request.form)
@@ -204,7 +204,7 @@ def updateproduct(id):
 
 @app.route('/deleteproduct/<int:id>',methods=['POST'])
 def deleteproduct(id):
-    product = Addproduct.query.get_or_404(id)
+    product = Product.query.get_or_404(id)
     if request.method == "POST":
         try:
             os.unlink(os.path.join(current_app.root_path, "static/images/" + product.image_1))

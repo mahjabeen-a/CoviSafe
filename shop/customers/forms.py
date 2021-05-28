@@ -1,7 +1,7 @@
 from wtforms import Form, StringField, TextAreaField, PasswordField, SubmitField, validators, ValidationError
 from flask_wtf.file import FileRequired, FileAllowed, FileField
 from flask_wtf import FlaskForm
-from .models import Register
+from .models import Customer
 
 class CustomerRegistrationForm(FlaskForm):
     name = StringField('Name: ')
@@ -21,11 +21,11 @@ class CustomerRegistrationForm(FlaskForm):
     submit = SubmitField('Submit')
 
     def validate_username(self, username):
-        if Register.query.filter_by(username=username.data).first():
+        if Customer.query.filter_by(username=username.data).first():
             raise ValidationError("This username is already in use!")
         
     def validate_email(self, email):
-        if Register.query.filter_by(email=email.data).first():
+        if Customer.query.filter_by(email=email.data).first():
             raise ValidationError("This email address is already in use!")
     
 class CustomerLoginForm(FlaskForm):

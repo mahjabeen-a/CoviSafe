@@ -9,13 +9,13 @@ User_loader (user defined function) is decorated by user_loader of flask
 '''
 @login_manager.user_loader
 def user_loader(user_id):
-    return Register.query.get(user_id)
+    return Customer.query.get(user_id)
 
 '''
 To make implementing a user class easier, we are inheriting from UserMixin, 
 which provides default implementations for properties and methods like is_authenticated etc. 
 '''
-class Register(db.Model, UserMixin):
+class Customer(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key= True)
     name = db.Column(db.String(50), unique= False)
     #f_name = db.Column(db.String(50), unique= False)
@@ -32,7 +32,7 @@ class Register(db.Model, UserMixin):
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
-        return '<Register %r>' % self.name
+        return '<Customer %r>' % self.name
 
 '''Allows the creation of types which add additional functionality to an existing type.'''
 class JsonEncodedDict(db.TypeDecorator):

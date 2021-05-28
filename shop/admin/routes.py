@@ -1,8 +1,8 @@
 from flask import render_template, session, request, redirect, url_for, flash
 from shop import app, db, bcrypt
 from .forms import RegistrationForm, LoginForm
-from .models import User
-from shop.products.models import Addproduct, Brand, Category
+from .models import Admin
+from shop.products.models import Product, Brand, Category
 import os
 
 @app.route('/admin')
@@ -10,7 +10,7 @@ def admin():
     if 'email' not in session:
         flash('Please login first','danger')
         return redirect(url_for('login'))
-    products = Addproduct.query.all()
+    products = Product.query.all()
     return render_template('admin/index.html', title='Admin Page',products=products)
 
 @app.route('/brands')
@@ -34,7 +34,7 @@ def register():
     form = RegistrationForm(request.form)
     if request.method == 'POST' and form.validate():
         hash_password = bcrypt.generate_password_hash(form.password.data)
-        user = User(name=form.name.data, username=form.username.data, email=form.email.data, password=hash_password)
+        user = Admin(name=form.name.data, username=form.username.data, email=form.email.data, password=hash_password)
         #add and commit the current user's entry
         db.session.add(user)
         db.session.commit()
@@ -47,7 +47,7 @@ def register():
 def login():
     form = LoginForm(request.form)
     if request.method == 'POST' and form.validate():
-        user = User.query.filter_by(email=form.email.data).first()
+        user = Admin.query.filter_by(email=form.email.data).first()
         if user and bcrypt.check_password_hash(user.password, form.password.data):
             session['email'] = form.email.data
             flash(f'Welcome {form.email.data} ! You are loggedin now','success')
