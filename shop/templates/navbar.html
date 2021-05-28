@@ -1,20 +1,22 @@
 <!--NAVBAR STARTS-->
 <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <a class="navbar-brand" href="/">Home</a>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light ">
+      <div class="container-fluid" >
+        <a class="navbar-brand" href="/">
+          <img src="../static/CovisafeIcon.png" alt="" width="60">
+          <img src="../static/CovisafeText.png" alt="" width="110">
+        </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
           aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-  
             <li class="nav-item">
-              <a class="nav-link" href="/">Products</a>
+              <a class="nav-link text-body" href="/">Products</a>
             </li>
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              <a class="nav-link dropdown-toggle text-body" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 Brands
               </a>
@@ -26,7 +28,7 @@
             </li>
   
             <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+              <a class="nav-link dropdown-toggle text-body" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                 aria-expanded="false">
                 Categories
               </a>
@@ -41,18 +43,18 @@
               <a href="{{url_for('profile', id=current_user.id)}}" class="nav-link">{{current_user.name}}</a>
             </li>
             <li class="nav-item">
-              <a href="{{url_for('customer_logout')}}" class="nav-link">Logout</a>
+              <a href="{{url_for('customer_logout')}}" class="nav-link text-body">Logout</a>
             </li>
             {% else %}
             <li class="nav-item">
-              <a href="{{url_for('customer_register')}}" class="nav-link">Sign up</a>
+              <a href="{{url_for('customer_register')}}" class="nav-link text-body">Sign up</a>
             </li>
             <li class="nav-item">
-              <a href="{{url_for('customerLogin')}}" class="nav-link">Login</a>
+              <a href="{{url_for('customerLogin')}}" class="nav-link text-body">Login</a>
             </li>
             {% endif %}
             <li class="nav-item">
-              <a class="nav-link" href="{{url_for('getCart')}}" tabindex="-1">Cart ({{session['Shoppingcart']|length}})</a>
+              <a class="nav-link text-body" href="{{url_for('getCart')}}" tabindex="-1">Cart ({{session['Shoppingcart']|length}})</a>
             </li>
           </ul>
           <form class="d-flex" action= "{{url_for('result')}}">
