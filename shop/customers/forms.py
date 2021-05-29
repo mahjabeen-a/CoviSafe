@@ -15,9 +15,6 @@ class CustomerRegistrationForm(FlaskForm):
     contact = StringField('Contact: ', [validators.DataRequired()])
     address = StringField('Address: ', [validators.DataRequired()])
     pincode = StringField('Pin Code: ', [validators.DataRequired()])
-
-    profile = FileField('Profile', validators=[FileAllowed(['jpg', 'png', 'jpeg', 'gif'], 'Only image allowed!')])
-
     submit = SubmitField('Submit')
 
     def validate_username(self, username):

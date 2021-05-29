@@ -28,7 +28,6 @@ class Customer(db.Model, UserMixin):
     contact = db.Column(db.String(50), unique= False)
     address = db.Column(db.String(50), unique= False)
     pincode = db.Column(db.String(50), unique= False)
-    profile = db.Column(db.String(200), unique= False , default='profile.jpg')
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
     def __repr__(self):
