@@ -79,40 +79,49 @@
   </div>
 
   <!--DISPLAY ALL PRODUCTS IN HOME PAGE-->
-  <div class="row"></div>
-  {% else %}
-  {% for product in products.items %}
-  <div class="col-md-3 mt-3">
-    <div class="card">
-      <img src="{{url_for('static', filename= 'images/' + product.image_1)}}" alt="{{product.name}}"
-        class="card-img-top" height="250px">
-      <div class="card-body">
-        <h5 class="text-center">{{product.name}}</h5>
-        <p class="text-center">Price: Rs {{product.price}}</p>
-        {% if product.discount > 0 %}
-        <b class="text-danger">Discount: {{product.discount}}%</b>
-        {% endif %}
-      </div>
-      <div class="card-footer">
-        <a href="{{url_for('single_page', id=product.id)}}" class="float-start btn btn-sm btn-primary">Details</a>
-        <form action="{{url_for('Addcart')}}" method="POST">
-          <input type="hidden" name="product_id" value="{{product.id}}">
-          <button type="submit" class="btn btn-sm btn-warning float-end">Add to Cart</button>
-
-          <input type="hidden" name="quantity" value="1" min="1" max="{{product.stock}}">
-          {% set colors = product.colors.split(',') %}
-
-          <select name="colors" id="colors" style="visibility: hidden;">
-            {% for color in colors %}
-            {% set col = color.split(':') %}
-            <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
-            {% endfor %}
-          </select>
-        </form>
+  <div class="row">
+    {% else %}
+    <div class="row">
+      <div class="card border border-dark border-2 ms-3 mt-3 h5 p-3" style="background-color: #cef8f5;">
+        <i>
+        Here at Covisafe, you can exclusively shop for protective gears and other products 
+        which are required to curb the COVID-19 pandemic.
+      </i>
       </div>
     </div>
+    {% for product in products.items %}
+    <div class="col-md-3 mt-3">
+      <div class="card">
+        <img src="{{url_for('static', filename= 'images/' + product.image_1)}}" alt="{{product.name}}"
+          class="card-img-top" height="250px">
+        <div class="card-body">
+          <h5 class="text-center">{{product.name}}</h5>
+          <p class="text-center">Price: Rs {{product.price}}</p>
+          {% if product.discount > 0 %}
+          <b class="text-danger">Discount: {{product.discount}}%</b>
+          {% endif %}
+        </div>
+        <div class="card-footer">
+          <a href="{{url_for('single_page', id=product.id)}}" class="float-start btn btn-sm btn-primary">Details</a>
+          <form action="{{url_for('Addcart')}}" method="POST">
+            <input type="hidden" name="product_id" value="{{product.id}}">
+            <button type="submit" class="btn btn-sm btn-warning float-end">Add to Cart</button>
+
+            <input type="hidden" name="quantity" value="1" min="1" max="{{product.stock}}">
+            {% set colors = product.colors.split(',') %}
+
+            <select name="colors" id="colors" style="visibility: hidden;">
+              {% for color in colors %}
+              {% set col = color.split(':') %}
+              <option value="{{col[0]}}">{{col[0] | capitalize }}</option>
+              {% endfor %}
+            </select>
+          </form>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
 
 <!--FOR PAGE NUMBERS-->
@@ -142,6 +151,4 @@
 </div>
 
 {% endif %}
-</div>
-</div>
 {% endblock content %}
