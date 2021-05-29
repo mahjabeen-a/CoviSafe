@@ -1,8 +1,10 @@
+from json.decoder import JSONDecodeError
 from flask import render_template, session, request, redirect, url_for, flash
 from shop import app, db, bcrypt
 from .forms import RegistrationForm, LoginForm
 from .models import Admin
 from shop.products.models import Product, Brand, Category
+from shop.customers.models import CustomerOrder, Customer, JsonEncodedDict
 import os
 
 @app.route('/admin')
@@ -60,3 +62,14 @@ def login():
 def logout():
     session.pop('email', None)
     return redirect(url_for('login'))
+
+#view customer orders
+@app.route('/orders')
+def orders_recieved():
+    if 'email' not in session:
+        flash('Please login first','danger')
+        return redirect(url_for('login'))
+    #orders = CustomerOrder.query.filter_by(customer_id=customer_id).order_by(CustomerOrder.id.desc()).first()
+    #cust_orders = CustomerOrder.query.join(Customer, (CustomerOrder.customer_id == Customer.id)).add_columns(CustomerOrder.id, CustomerOrder.invoice, CustomerOrder.customer_id, Customer.address, Customer.city, Customer.state, Customer.pincode).all()
+    cust_orders = db.session.query(CustomerOrder, Customer).filter(CustomerOrder.customer_id == Customer.id).order_by(CustomerOrder.date_created.desc()).all()
+    return render_template('products/orders.html', title='Orders',cust_orders=cust_orders)
