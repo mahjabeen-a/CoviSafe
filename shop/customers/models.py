@@ -1,3 +1,4 @@
+from sqlalchemy.orm import backref
 from shop import db,login_manager
 from datetime import datetime
 from flask_login import UserMixin
@@ -16,6 +17,7 @@ To make implementing a user class easier, we are inheriting from UserMixin,
 which provides default implementations for properties and methods like is_authenticated etc. 
 '''
 class Customer(db.Model, UserMixin):
+    __tablename__ = 'customer'
     id = db.Column(db.Integer, primary_key= True)
     name = db.Column(db.String(50), unique= False)
     #f_name = db.Column(db.String(50), unique= False)
@@ -29,6 +31,7 @@ class Customer(db.Model, UserMixin):
     address = db.Column(db.String(50), unique= False)
     pincode = db.Column(db.String(50), unique= False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    cust_order = db.relationship('CustomerOrder',backref = 'customer', lazy = True)
 
     def __repr__(self):
         return '<Customer %r>' % self.name
@@ -56,7 +59,7 @@ class CustomerOrder(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     invoice = db.Column(db.String(20), unique=True, nullable=False)
     status = db.Column(db.String(20), default='Pending', nullable=False)
-    customer_id = db.Column(db.Integer, unique=False, nullable=False)
+    customer_id = db.Column(db.Integer, db.ForeignKey('customer.id'), nullable=False)
     date_created = db.Column(db.DateTime, default=datetime.utcnow, nullable=False)
     orders = db.Column(JsonEncodedDict)
     
