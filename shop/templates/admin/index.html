@@ -7,6 +7,7 @@
         <thead>
             <th>Sr</th>
             <th>Product</th>
+            <th>Stock</th>
             <th>Price</th>
             <th>Discount</th>
             <th>Brand</th>
@@ -19,6 +20,7 @@
           <tr>
             <td>{{loop.index}}</td>
             <td>{{ product.name }}</td>
+            <td>{{ product.stock}}</td>
             <td>{{ product.price }}</td>
             <td>{{ product.discount }}</td>
             <td>{{ product.brand.name}}</td>
